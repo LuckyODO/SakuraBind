@@ -13,10 +13,7 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockDispenseEvent
 import org.bukkit.event.entity.*
-import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryMoveItemEvent
-import org.bukkit.event.inventory.InventoryPickupItemEvent
-import org.bukkit.event.inventory.PrepareItemCraftEvent
+import org.bukkit.event.inventory.*
 import org.bukkit.event.player.*
 import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
@@ -425,7 +422,6 @@ object ItemListener : Listener {
         val player = event.whoClicked
         if (Config.checkByPass(player)) return
         var item: ItemStack? = event.currentItem
-
         if (item.checkAir()) {
             item = if (event.click.name == "SWAP_OFFHAND") {
                 player.inventory.itemInOffHand
@@ -469,6 +465,16 @@ object ItemListener : Listener {
         // 背包类型检查
         onInventoryClickEvent2(event, item)
 
+        if (!event.isCancelled && event.action == InventoryAction.HOTBAR_SWAP) {
+            if (event.click.name == "SWAP_OFFHAND") {
+                item = player.inventory.itemInOffHand
+                if (!item.checkAir()) onInventoryClickEvent2(event, item)
+            } else if (event.action == InventoryAction.HOTBAR_SWAP) {
+                val bottomInventory = event.view.bottomInventory
+                item = bottomInventory.getItem(event.hotbarButton)
+                if (!item.checkAir()) onInventoryClickEvent2(event, item!!)
+            }
+        }
     }
 
 

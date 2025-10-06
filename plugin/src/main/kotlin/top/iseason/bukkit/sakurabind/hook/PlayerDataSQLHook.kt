@@ -6,7 +6,7 @@ import org.bukkit.event.EventPriority
 import top.iseason.bukkit.sakurabind.listener.SelectListener
 import top.iseason.bukkittemplate.hook.BaseHook
 
-object PlayerDataSQLHook : BaseHook("PlayerDataSQL_Baned"), org.bukkit.event.Listener {
+object PlayerDataSQLHook : BaseHook("PlayerDataSQL"), org.bukkit.event.Listener {
     override fun checkHooked() {
         super.checkHooked()
         if (hasHooked) SelectListener.hasSyncPlugin = true
